@@ -4,6 +4,10 @@ const app = express()
 const InMemoryWorkshop = require("./inMemoryWorkshop")
 const path = require("path")
 const ejs = require('ejs')
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({ extended: false }))
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '..', '/ejs'));
@@ -20,6 +24,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/workshop', function (req, res) {
+    console.log("get")
     res.render('workshop')
 })
 
@@ -27,9 +32,14 @@ app.post('/workshop', function (req, res) {
     const name = req.body.name
     const description = req.body.description
     InMemoryWorkshop.addWorkshop(name, description).then(() => {
-        res.render('index')
+        InMemoryWorkshop.getWorkshopList()
+        .then(workshops => {
+            res.render("index", {
+                workshops: workshops
+            })
+        })
     })
-    .catch(e =>ejs.send(e.message))
+    .catch(e =>res.send(e.message))
 })
 
 app.get('/workshop/:name', function (req, res) {
