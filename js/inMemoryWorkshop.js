@@ -1,5 +1,9 @@
-inMemoryWorkshop = []
+let inMemoryWorkshop;
 
+function init() {
+    inMemoryWorkshop = [];
+    return Promise.resolve();
+}
 
 function getWorkshopList() {
     return new Promise((resolve, ) => {
@@ -38,13 +42,14 @@ function removeWorkshopByName(name) {
     })
 }
 
-function updateWorkshop(name) {
+function updateWorkshop(name, description) {
     return new Promise((resolve, reject) => {
         reject(new Error("Not implemented"))
     })
 }
 
 module.exports = {
+    init,
     getWorkshopList,
     getWorkshopByName,
     addWorkshop,
